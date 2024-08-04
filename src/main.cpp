@@ -67,6 +67,7 @@ float raggio_sfera=2.5;
 vec3 asse = vec3(0.0, 1.0, 0.0);
 bool selected_obj_imported = false;
 int selected_obj = 0;
+int selected_sub_obj = -1;
 float cameraSpeed = 0.1;
 vector<Mesh> Scena;
 point_light light;
@@ -287,7 +288,11 @@ void drawScene(void) {
 	RenderText(programId_text, Projection_text, stringa_asse, VAO_Text, VBO_Text, 50.0f, 700.0f, 0.5f, glm::vec3(1.0, 0.0f, 0.2f));
 	RenderText(programId_text, Projection_text, "Oggetto selezionato", VAO_Text, VBO_Text, 80.0f, 750.0f, 0.5f, glm::vec3(1.0, 0.0f, 0.2f));
 	if (selected_obj > -1)
-		RenderText(programId_text, Projection_text, Scena[selected_obj].nome.c_str(), VAO_Text, VBO_Text, 120.0f, 700.0f, 0.5f, glm::vec3(1.0, 0.0f, 0.2f));
+		if (selected_obj_imported) {
+			RenderText(programId_text, Projection_text, ScenaObj[selected_obj][0].nome.c_str(), VAO_Text, VBO_Text, 120.0f, 700.0f, 0.5f, glm::vec3(1.0, 0.0f, 0.2f));
+		} else {
+			RenderText(programId_text, Projection_text, Scena[selected_obj].nome.c_str(), VAO_Text, VBO_Text, 120.0f, 700.0f, 0.5f, glm::vec3(1.0, 0.0f, 0.2f));
+		}
 	glutSwapBuffers();
 }
 

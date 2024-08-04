@@ -15,6 +15,7 @@ extern bool clickObject;
 extern Mesh  Cubo, Piramide, Piano;
 extern bool selected_obj_imported;
 extern int selected_obj;
+extern int selected_sub_obj;
 extern int height, width;
 extern float raggio_sfera;
 extern bool clickObject, moving_trackball;
@@ -34,19 +35,34 @@ void modifyModelMatrix(vec3 translation_vector, vec3 rotation_vector, GLfloat an
 	mat4 traslation = glm::translate(glm::mat4(1), translation_vector);
 	mat4 scale = glm::scale(glm::mat4(1), glm::vec3(scale_factor, scale_factor, scale_factor));
 	mat4 rotation = glm::rotate(glm::mat4(1), angle, rotation_vector);
-	Scena[selected_obj].Model = Scena[selected_obj].Model * scale * rotation * traslation;
+  if (selected_obj_imported) {
+	  ScenaObj[selected_obj][selected_sub_obj].ModelM =
+      ScenaObj[selected_obj][selected_sub_obj].ModelM * scale * rotation * traslation;
+  } else {
+	  Scena[selected_obj].Model =
+      Scena[selected_obj].Model * scale * rotation * traslation;
+  }
 	glutPostRedisplay();
 }
 
 void toggleBoundingSphere() {
-  Scena[selected_obj].collisionEnabled = !Scena[selected_obj].collisionEnabled;
+  if (selected_obj_imported) {
+    ScenaObj[selected_obj][selected_sub_obj].collisionEnabled =
+      !ScenaObj[selected_obj][selected_sub_obj].collisionEnabled;
+  } else {
+    Scena[selected_obj].collisionEnabled = !Scena[selected_obj].collisionEnabled;
+  }
   printf("%s bounding sphere\n", Scena[selected_obj].collisionEnabled ? "Enabled" : "Disabled");
 }
 void increaseBoundingSphereRange(bool increase) {
   float delta = round(0.05f * (increase
     ? 1
     : -1)* 100.0f) / 100.0f;
-  Scena[selected_obj].collisionSphereRadius += delta;
+  if (selected_obj_imported) {
+    ScenaObj[selected_obj][selected_sub_obj].collisionSphereRadius += delta;
+  } else {
+    Scena[selected_obj].collisionSphereRadius += delta;
+  }
   printf("Setting collision sphere radius to: %.2f\n", Scena[selected_obj].collisionSphereRadius);
 }
 
@@ -248,6 +264,7 @@ void mouse(int button, int state, int x, int y) {
         float closest_intersectionB = 0.0f;
         int selected_objA = -1;
         int selected_objB = -1;
+        int selected_subObjB = -1;
         for (int i = 0; i < Scena.size(); i++) {
           float t_dist = 0.0f;
           //printf("Testing for user: %f %f %f | Mesh: %f %f %f\n", SetupTelecamera.position.x, SetupTelecamera.position.y, SetupTelecamera.position.z, Scena[i].ancora_world.x, Scena[i].ancora_world.y, Scena[i].ancora_world.z);
@@ -265,6 +282,7 @@ void mouse(int button, int state, int x, int y) {
             if (ray_sphere(SetupTelecamera.position, ray_wor, ScenaObj[k][i].ancora_world, raggio_sfera, &t_dist)) {
               if (selected_objB == -1 || t_dist < closest_intersectionB) {
                 selected_objB = k;
+                selected_subObjB = i;
                 closest_intersectionB = t_dist;
               }
             }
@@ -285,7 +303,8 @@ void mouse(int button, int state, int x, int y) {
         }
         if (selected_obj > -1) {
           if (selected_obj_imported) {
-            printf("\nOggetto selezionato\t%d -> %s \n", selected_obj, ScenaObj[selected_obj][0].nome.c_str());
+            selected_sub_obj = selected_subObjB;
+            printf("\nOggetto selezionato\t%d -> %s submesh -> %i \n", selected_obj, ScenaObj[selected_obj][selected_sub_obj].nome.c_str(), selected_sub_obj);
           } else {
             printf("\nOggetto selezionato\t%d -> %s \n", selected_obj, Scena[selected_obj].nome.c_str());
           }

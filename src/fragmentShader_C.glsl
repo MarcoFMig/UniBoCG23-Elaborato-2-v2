@@ -8,12 +8,12 @@ uniform vec2 resolution;
 uniform int sceltaVS;
 
 struct PointLight{
-  vec3 position;
-  vec3 color;
-  float power;
+	vec3 position;
+	vec3 color;
+	float power;
 };
 
-//definizione di una variabile uniform che ha la struttura PointLight
+ //definizione di una variabile uniform che ha la struttura PointLight
 uniform PointLight light;
 struct Material {
   vec3 ambient;
@@ -34,9 +34,9 @@ void main() {
   }
   if(sceltaVS==1 || sceltaVS==4)  /* Caso no-shading, shading interpolativo, shading bandiera */ {
     //FragColor = mix(texture(id_tex1,frag_coord_st),texture(id_tex,frag_coord_st), 0.3);
+    FragColor= mix(ourColor,texture(id_tex,frag_coord_st),0.3);
   }
-  FragColor= mix(ourColor,texture(id_tex,frag_coord_st),0.3);   
-  if (sceltaVS==2) /* Shading di Phong: il modello di illuminazione viene implementato nel fragment shader*/ {
+  if (sceltaVS==2) /* Shading di Phong: il modello di illuminazione viene implementato nel fragment shader */ {
     vec3 ambient = light.power * material.ambient;
     //diffuse
     float coseno_angolo_theta= max(dot(L,N), 0);
@@ -45,5 +45,16 @@ void main() {
     float coseno_angolo_alfa =  pow(max(dot(V,R),0),material.shininess);
     vec3 specular =  light.power * light.color * coseno_angolo_alfa * material.specular;
     FragColor = vec4(ambient + diffuse + specular, 1.0);      
-  }
+  }   
+  if (sceltaVS==5) /* Shading di Phong: il modello di illuminazione viene implementato nel fragment shader */ {
+    vec3 ambient = light.power * material.ambient;
+    // Componente diffusa
+    float coseno_angolo_theta = max(dot(L, N), 0);
+    vec3 diffuse = light.power * light.color * coseno_angolo_theta * material.diffuse;
+    // Componente speculare di Blinn-Phong
+    vec3 halfwayDir = normalize(L + V);
+    float coseno_angolo_alfa = pow(max(dot(N, halfwayDir), 0), material.shininess);
+    vec3 specular = light.power * light.color * coseno_angolo_alfa * material.specular;
+    FragColor = vec4(ambient + diffuse + specular, 1.0);  
+  }   
 }

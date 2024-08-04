@@ -51,7 +51,7 @@ void INIT_SHADER() {
  * other data structures wich hold all the primitives and all the imported assets.
  */
 void INIT_VAO() {
-	string name = "minnie.png";
+	string name = "steve.jpg";
 	string path = Imagedir + name;
 	texture = loadTexture(path.c_str(), 0);
 	name = "muromattoni.jpg";

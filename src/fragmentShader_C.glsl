@@ -46,7 +46,7 @@ void main() {
     vec3 specular =  light.power * light.color * coseno_angolo_alfa * material.specular;
     FragColor = vec4(ambient + diffuse + specular, 1.0);      
   }   
-  if (sceltaVS==5) /* Shading di Phong: il modello di illuminazione viene implementato nel fragment shader */ {
+  if (sceltaVS==5) /* Shading di Blinn-Phong: il modello di illuminazione viene implementato nel fragment shader */ {
     vec3 ambient = light.power * material.ambient;
     // Componente diffusa
     float coseno_angolo_theta = max(dot(L, N), 0);

@@ -45,5 +45,5 @@ void main() {
     float coseno_angolo_alfa =  pow(max(dot(V,R),0),material.shininess);
     vec3 specular =  light.power * light.color * coseno_angolo_alfa * material.specular;
     FragColor = vec4(ambient + diffuse + specular, 1.0);      
-  }   
+  }
 }

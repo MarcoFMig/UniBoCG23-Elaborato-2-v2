@@ -3,6 +3,9 @@
 #include "enum_illuminazione.h" 
 #include <string>
 
+#define DEFAULT_COLLISION_TOGGLE	true
+#define DEFAULT_COLLISION_RADIUS	2.0f
+
 typedef struct {
 	string name;
 	glm::vec3 ambient;
@@ -30,6 +33,8 @@ typedef struct {
 	MaterialType material;
 	vec4 ancora_obj;
 	vec4 ancora_world;
+	bool collisionEnabled = DEFAULT_COLLISION_TOGGLE;
+	float collisionSphereRadius = DEFAULT_COLLISION_RADIUS;
 } Mesh;
 
 typedef struct {

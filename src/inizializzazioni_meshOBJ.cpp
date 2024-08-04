@@ -346,7 +346,7 @@ void INIT_Illuminazione() {
 	materials[MaterialType::NO_MATERIAL].shininess = 1.f;
 
 	//Setup degli shader
-	shaders.resize(5);
+	shaders.resize(6);
 	shaders[ShaderOption::NONE].value = 0;
 	shaders[ShaderOption::NONE].name = "NONE";
 	shaders[ShaderOption::GOURAD_SHADING].value = 1;
@@ -357,4 +357,6 @@ void INIT_Illuminazione() {
 	shaders[ShaderOption::NO_TEXTURE].name = "NO TEXTURE";
 	shaders[ShaderOption::WAVE].value = 4;
 	shaders[ShaderOption::WAVE].name = "WAVE";
+	shaders[ShaderOption::BLINN_PHONG_SHADING].value = 5;
+	shaders[ShaderOption::BLINN_PHONG_SHADING].name = "BLINN PHONG SHADING";
 }

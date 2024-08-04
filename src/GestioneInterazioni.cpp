@@ -36,6 +36,18 @@ void modifyModelMatrix(vec3 translation_vector, vec3 rotation_vector, GLfloat an
 	glutPostRedisplay();
 }
 
+void toggleBoundingSphere() {
+  Scena[selected_obj].collisionEnabled = !Scena[selected_obj].collisionEnabled;
+  printf("%s bounding sphere\n", Scena[selected_obj].collisionEnabled ? "Enabled" : "Disabled");
+}
+void increaseBoundingSphereRange(bool increase) {
+  float delta = round(0.05f * (increase
+    ? 1
+    : -1)* 100.0f) / 100.0f;
+  Scena[selected_obj].collisionSphereRadius += delta;
+  printf("Setting collision sphere radius to: %.2f\n", Scena[selected_obj].collisionSphereRadius);
+}
+
 void keyboardPressedEvent(unsigned char key, int x, int y) {
 	char* intStr;
 	string str;
@@ -55,6 +67,15 @@ void keyboardPressedEvent(unsigned char key, int x, int y) {
     break;
     // End camera movement sections
     // Show object anchors
+    case 'u':
+      toggleBoundingSphere();
+    break;
+    case 'j':
+      increaseBoundingSphereRange(true);
+    break;
+    case 'm':
+      increaseBoundingSphereRange(false);
+    break;
     case 'v':
       visualizzaAncora = TRUE;
     break;

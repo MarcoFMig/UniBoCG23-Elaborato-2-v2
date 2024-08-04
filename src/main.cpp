@@ -203,7 +203,7 @@ void drawScene(void) {
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
 	glDrawElements(GL_TRIANGLES, (Scena[1].indici.size() - 1) * sizeof(GLuint), GL_UNSIGNED_INT, 0);
 	glUseProgram(programId);
-	glPointSize(10.0);
+	glPointSize(10.0f);
   // View mat to gpu
 	glUniformMatrix4fv(MatView, 1, GL_FALSE, value_ptr(View));
 	// Lighting definitions to gpu
@@ -258,6 +258,9 @@ void drawScene(void) {
 	for (int j = 0; j < ScenaObj.size(); j++)	{
     // Objects might contain more than one mesh
 		for (int k = 0; k < ScenaObj[j].size(); k++) {
+      // Conversion to world coords
+      Scena[k].ancora_world = Scena[k].ancora_obj;
+      Scena[k].ancora_world = Scena[k].Model * Scena[k].ancora_world;
       // Uploading object's matrix to gpu
 			glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(ScenaObj[j][k].ModelM));
 			glUniform1i(locSceltaVs, ScenaObj[j][k].sceltaVS);
@@ -267,12 +270,15 @@ void drawScene(void) {
 			glUniform3fv(light_unif.material_diffuse, 1, value_ptr(ScenaObj[j][k].materiale.diffuse));
 			glUniform3fv(light_unif.material_specular, 1, value_ptr(ScenaObj[j][k].materiale.specular));
 			glUniform1f(light_unif.material_shininess, ScenaObj[j][k].materiale.shininess);
-
 			glBindVertexArray(ScenaObj[j][k].VAO);
+      if (visualizzaAncora==TRUE) {
+        int ind = ScenaObj[j][k].indici.size() - 1;
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT, BUFFER_OFFSET(ind * sizeof(GLuint)));
+      }
 			glDrawElements(GL_TRIANGLES, (ScenaObj[j][k].indici.size()) * sizeof(GLuint), GL_UNSIGNED_INT, 0);
 			glBindVertexArray(0);
 		}
-
 	}
 	// Text renderer init
 	RenderText(programId_text, Projection_text, Operazione, VAO_Text, VBO_Text, 50.0f, 650.0f, 0.5f, glm::vec3(1.0, 0.0f, 0.2f));

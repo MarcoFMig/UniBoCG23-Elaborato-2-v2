@@ -5,6 +5,7 @@
 #include "enum.h"
 extern bool visualizzaAncora;
 extern int cont_cubi,cont_pir;
+extern vector<vector<MeshObj>> ScenaObj;
 extern vector<Mesh> Scena;
 extern string stringa_asse, Operazione;
 extern vec3 asse;
@@ -12,6 +13,7 @@ extern mat4 Projection, View;
 extern ViewSetup SetupTelecamera;
 extern bool clickObject;
 extern Mesh  Cubo, Piramide, Piano;
+extern bool selected_obj_imported;
 extern int selected_obj;
 extern int height, width;
 extern float raggio_sfera;
@@ -242,18 +244,51 @@ void mouse(int button, int state, int x, int y) {
         vec3 ray_wor = get_ray_from_mouse(xmouse, ymouse);
 
         selected_obj = -1;
-        float closest_intersection = 0.0f;
+        float closest_intersectionA = 0.0f;
+        float closest_intersectionB = 0.0f;
+        int selected_objA = -1;
+        int selected_objB = -1;
         for (int i = 0; i < Scena.size(); i++) {
           float t_dist = 0.0f;
+          //printf("Testing for user: %f %f %f | Mesh: %f %f %f\n", SetupTelecamera.position.x, SetupTelecamera.position.y, SetupTelecamera.position.z, Scena[i].ancora_world.x, Scena[i].ancora_world.y, Scena[i].ancora_world.z);
           if (ray_sphere(SetupTelecamera.position, ray_wor, Scena[i].ancora_world, raggio_sfera, &t_dist)) {
-            if (selected_obj == -1 || t_dist < closest_intersection) {
-              selected_obj = i;
-              closest_intersection = t_dist;
+            if (selected_objA == -1 || t_dist < closest_intersectionA) {
+              selected_objA = i;
+              closest_intersectionA = t_dist;
             }
           }
         }
+        for (int k = 0; k < ScenaObj.size(); k++) {
+          for (int i = 0; i < ScenaObj[k].size(); i++) {
+            float t_dist = 0.0f;
+            //printf("Testing for user: %f %f %f | MeshObj: %f %f %f\n", SetupTelecamera.position.x, SetupTelecamera.position.y, SetupTelecamera.position.z, ScenaObj[k][i].ancora_world.x, ScenaObj[k][i].ancora_world.y, ScenaObj[k][i].ancora_world.z);
+            if (ray_sphere(SetupTelecamera.position, ray_wor, ScenaObj[k][i].ancora_world, raggio_sfera, &t_dist)) {
+              if (selected_objB == -1 || t_dist < closest_intersectionB) {
+                selected_objB = k;
+                closest_intersectionB = t_dist;
+              }
+            }
+          }
+        }
+        //printf("Closest intersectionA: %f | Closest intersectionB: %f\n", closest_intersectionA, closest_intersectionB);
+        if (closest_intersectionA <= 0.0f && closest_intersectionB >= 0.0f
+          || closest_intersectionB <= 0.0f && closest_intersectionA >= 0.0f) {
+          selected_obj_imported = closest_intersectionA <= 0.0f;
+          selected_obj = selected_obj_imported
+            ? selected_objB
+            : selected_objA;
+        } else {
+          selected_obj_imported = closest_intersectionA > closest_intersectionB;
+          selected_obj = selected_obj_imported
+            ? selected_objB
+            : selected_objA;
+        }
         if (selected_obj > -1) {
-          printf("\nOggetto selezionato\t%d -> %s \n", selected_obj, Scena[selected_obj].nome.c_str());
+          if (selected_obj_imported) {
+            printf("\nOggetto selezionato\t%d -> %s \n", selected_obj, ScenaObj[selected_obj][0].nome.c_str());
+          } else {
+            printf("\nOggetto selezionato\t%d -> %s \n", selected_obj, Scena[selected_obj].nome.c_str());
+          }
         }
       }
     break;

@@ -65,6 +65,7 @@ unsigned int loc_view_posR;
 unsigned int loc_cubemapR;
 float raggio_sfera=2.5;
 vec3 asse = vec3(0.0, 1.0, 0.0);
+bool selected_obj_imported = false;
 int selected_obj = 0;
 float cameraSpeed = 0.1;
 vector<Mesh> Scena;
@@ -259,8 +260,9 @@ void drawScene(void) {
     // Objects might contain more than one mesh
 		for (int k = 0; k < ScenaObj[j].size(); k++) {
       // Conversion to world coords
-      Scena[k].ancora_world = Scena[k].ancora_obj;
-      Scena[k].ancora_world = Scena[k].Model * Scena[k].ancora_world;
+      ScenaObj[j][k].ancora_world = ScenaObj[j][k].ancora_obj;
+      ScenaObj[j][k].ancora_world = ScenaObj[j][k].ModelM * ScenaObj[j][k].ancora_world;
+
       // Uploading object's matrix to gpu
 			glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(ScenaObj[j][k].ModelM));
 			glUniform1i(locSceltaVs, ScenaObj[j][k].sceltaVS);

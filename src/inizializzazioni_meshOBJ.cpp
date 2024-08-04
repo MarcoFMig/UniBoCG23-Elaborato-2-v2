@@ -231,9 +231,9 @@ void INIT_VAO() {
 		Model3D[i].nome = "Nanosuit";
 		Model3D[i].sceltaVS = 3;
 
-    //Model3D[i].vertici.push_back(vec4(0.0f, 0.0f, 0.0f, 1.0f));
-    //Model3D[i].indici.push_back(Model3D[i].vertici.size() - 1);
-    //Model3D[i].ancora_obj = (vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    Model3D[i].vertici.push_back(vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    Model3D[i].indici.push_back(Model3D[i].vertici.size() - 1);
+    Model3D[i].ancora_obj = (vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
 		vec3 ambiental = Model3D[i].materiale.ambient;
 		vec3 diffusivo = Model3D[i].materiale.diffuse;
@@ -258,12 +258,12 @@ void INIT_VAO() {
 		Model3D[i].ModelM = mat4(1.0);
 		Model3D[i].ModelM = translate(Model3D[i].ModelM, vec3(2.0, -1.0, 16.0));
 		Model3D[i].ModelM = scale(Model3D[i].ModelM, vec3(0.5, 0.5, 0.5));
-		Model3D[i].nome = "Model3D";
+		Model3D[i].nome = "CarModel";
 		Model3D[i].sceltaVS = 3;
 
-    //Model3D[i].vertici.push_back(vec4(0.0f, 0.0f, 0.0f, 1.0f));
-    //Model3D[i].indici.push_back(Model3D[i].vertici.size() - 1);
-    //Model3D[i].ancora_obj = (vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    Model3D[i].vertici.push_back(vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    Model3D[i].indici.push_back(Model3D[i].vertici.size() - 1);
+    Model3D[i].ancora_obj = (vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
 		vec3 ambiental = Model3D[i].materiale.ambient;
 		vec3 diffusivo = Model3D[i].materiale.diffuse;

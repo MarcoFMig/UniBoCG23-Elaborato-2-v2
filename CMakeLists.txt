@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.27)
-project(Esercitazione VERSION 0.0.1 LANGUAGES CXX)
+project(UniboCG23-Elaborato-2-v2 VERSION 0.5.0 LANGUAGES CXX)
 
 include(CTest)
 enable_testing()
@@ -28,15 +28,15 @@ include_directories(${MANUAL_INCLUDE_DIRS})
 
 file(GLOB SOURCES "${PROJECT_SOURCE_DIR}/src/*.cpp")
 
-add_executable(Esercitazione ${SOURCES})
+add_executable(UniboCG23-Elaborato-2-v2 ${SOURCES})
 
-target_link_libraries(Esercitazione PUBLIC glew)
-target_link_libraries(Esercitazione PUBLIC freeglut)
-target_link_libraries(Esercitazione PUBLIC glm)
-target_link_libraries(Esercitazione PUBLIC freetype)
-target_link_libraries(Esercitazione PUBLIC assimp)
+target_link_libraries(UniboCG23-Elaborato-2-v2 PUBLIC glew)
+target_link_libraries(UniboCG23-Elaborato-2-v2 PUBLIC freeglut)
+target_link_libraries(UniboCG23-Elaborato-2-v2 PUBLIC glm)
+target_link_libraries(UniboCG23-Elaborato-2-v2 PUBLIC freetype)
+target_link_libraries(UniboCG23-Elaborato-2-v2 PUBLIC assimp)
 
-set_target_properties(Esercitazione
+set_target_properties(UniboCG23-Elaborato-2-v2
     PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin/"
     LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin/"
@@ -45,8 +45,8 @@ set_target_properties(Esercitazione
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}"/bin/")
 
-add_custom_command(TARGET Esercitazione POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:Esercitazione> $<TARGET_FILE_DIR:Esercitazione>
+add_custom_command(TARGET UniboCG23-Elaborato-2-v2 POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:UniboCG23-Elaborato-2-v2> $<TARGET_FILE_DIR:UniboCG23-Elaborato-2-v2>
   COMMAND_EXPAND_LISTS
   )
 
